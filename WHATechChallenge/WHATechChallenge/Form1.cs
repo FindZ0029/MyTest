@@ -17,7 +17,6 @@ namespace WHATechChallenge
         public DataTable TableUnsettled = new DataTable();
 
         public DataTable TableSettledSum = new DataTable();
-        public DataTable TableUnsettledSum = new DataTable();
 
         public Form1()
         {
@@ -64,6 +63,37 @@ namespace WHATechChallenge
             return DT;
         }
 
+
+        public void GetSettledSum()
+        {
+            DataView MyView = new DataView(TableSettled);
+            TableSettledSum = MyView.ToTable(true, "Customer");
+            TableSettledSum.Columns.Add("Win Rate");
+            TableSettledSum.Columns.Add("Average Bet");
+
+            int x, y;
+
+            for (x = 0; x <= TableSettledSum.Rows.Count - 1; x++)
+            {
+                decimal BetCount = 0, WinCount = 0, TotalBet = 0;
+                for (y = 0; y <= TableSettled.Rows.Count - 1; y++)
+                {
+                    if (TableSettledSum.Rows[x][0].ToString() == TableSettled.Rows[y][0].ToString())
+                    {
+                        BetCount++;
+                        TotalBet = TotalBet + Convert.ToDecimal(TableSettled.Rows[y]["Stake"]);
+                        if (TableSettled.Rows[y]["Win"].ToString() != "0")
+                        {
+                            WinCount++;
+                        }
+                    }
+                }
+
+                TableSettledSum.Rows[x]["Average Bet"] = Math.Round(TotalBet / BetCount, 2);
+                TableSettledSum.Rows[x]["Win Rate"] = Math.Round(((WinCount / BetCount) * 100), 2);
+            }
+        }
+
         private void btnBrowse1_Click(object sender, EventArgs e)
         {
             string Path = GetFileLoc();
@@ -97,34 +127,62 @@ namespace WHATechChallenge
             TableSettled = FillTable(TableSettled, txtSettled.Text);
             TableUnsettled = FillTable(TableUnsettled, txtUnsettled.Text);
 
-            DataView MyView = new DataView(TableSettled);
-
-            TableSettledSum = MyView.ToTable(true, "Customer");
-            TableSettledSum.Columns.Add("Win Rate");
-
-            int x,y;
-
-            for(x = 0; x <= TableSettledSum.Rows.Count -1; x++)
-            {
-                decimal BetCount = 0, WinCount = 0;
-                for(y=0; y <= TableSettled.Rows.Count -1; y++)
-                {
-                    if(TableSettledSum.Rows[x][0].ToString() == TableSettled.Rows[y][0].ToString())
-                    {
-                        BetCount++;
-                        if(TableSettled.Rows[y]["Win"].ToString() != "0")
-                        {
-                            WinCount++;
-                        }
-                    }
-                }
-                TableSettledSum.Rows[x]["Win Rate"] = Math.Round(((WinCount / BetCount) * 100),2);
-            }
+            GetSettledSum();
 
             dgvSettled.DataSource = TableSettled;
             dgvSettledSum.DataSource = TableSettledSum;
 
+            TableUnsettled.Columns.Add("Risks");
+            CheckRisks();
+
             dgvUnsettled.DataSource = TableUnsettled;
+        }
+
+        private void riskLegendToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form2 Leg = new Form2();
+            Leg.ShowDialog();
+        }
+
+        public void CheckRisks()
+        {
+            int x,y;
+
+            for(x = 0; x <= TableUnsettled.Rows.Count-1; x++)
+            {
+                for(y=0; y <= TableSettledSum.Rows.Count -1; y++)
+                {
+                    if(TableUnsettled.Rows[x][0].ToString() == TableSettledSum.Rows[y][0].ToString())
+                    {
+                        if(Convert.ToDecimal(TableSettledSum.Rows[y]["Win Rate"]) > 60)
+                        {
+                            TableUnsettled.Rows[x]["Risks"] = 1;
+                        }
+                        if(Convert.ToDecimal(TableSettledSum.Rows[y]["Average Bet"]) * 10 > Convert.ToDecimal(TableUnsettled.Rows[x]["Stake"]))
+                        {
+                            if(TableUnsettled.Rows[x]["Risks"].ToString() != "")
+                            {
+                                TableUnsettled.Rows[x]["Risks"] = TableUnsettled.Rows[x]["Risks"] + ",2";
+                            }
+                            else
+                            {
+                                TableUnsettled.Rows[x]["Risks"] = 2;
+                            }
+                        }
+                        if (Convert.ToDecimal(TableSettledSum.Rows[y]["Average Bet"]) * 30 > Convert.ToDecimal(TableUnsettled.Rows[x]["Stake"]))
+                        {
+                            if (TableUnsettled.Rows[x]["Risks"].ToString() != "")
+                            {
+                                TableUnsettled.Rows[x]["Risks"] = TableUnsettled.Rows[x]["Risks"] + ",3";
+                            }
+                            else
+                            {
+                                TableUnsettled.Rows[x]["Risks"] = 3;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

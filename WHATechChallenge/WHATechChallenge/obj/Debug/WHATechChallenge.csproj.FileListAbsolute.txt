@@ -8,3 +8,4 @@ C:\Users\Mac\Documents\GitHub\https---github.com-FindZ0029-MyTest.git\MyTest\WHA
 C:\Users\Mac\Documents\GitHub\https---github.com-FindZ0029-MyTest.git\MyTest\WHATechChallenge\WHATechChallenge\obj\Debug\WHATechChallenge.csproj.GenerateResource.Cache
 C:\Users\Mac\Documents\GitHub\https---github.com-FindZ0029-MyTest.git\MyTest\WHATechChallenge\WHATechChallenge\obj\Debug\WHATechChallenge.exe
 C:\Users\Mac\Documents\GitHub\https---github.com-FindZ0029-MyTest.git\MyTest\WHATechChallenge\WHATechChallenge\obj\Debug\WHATechChallenge.pdb
+C:\Users\Mac\Documents\GitHub\https---github.com-FindZ0029-MyTest.git\MyTest\WHATechChallenge\WHATechChallenge\obj\Debug\WHATechChallenge.Form2.resources
