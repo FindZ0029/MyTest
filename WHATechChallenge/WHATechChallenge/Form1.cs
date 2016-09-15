@@ -63,7 +63,6 @@ namespace WHATechChallenge
             return DT;
         }
 
-
         public void GetSettledSum()
         {
             DataView MyView = new DataView(TableSettled);
@@ -124,18 +123,25 @@ namespace WHATechChallenge
 
         private void btnEvaluate_Click(object sender, EventArgs e)
         {
-            TableSettled = FillTable(TableSettled, txtSettled.Text);
-            TableUnsettled = FillTable(TableUnsettled, txtUnsettled.Text);
+            if (txtSettled.Text != "" && txtUnsettled.Text != "")
+            {
+                TableSettled = FillTable(TableSettled, txtSettled.Text);
+                TableUnsettled = FillTable(TableUnsettled, txtUnsettled.Text);
 
-            GetSettledSum();
+                GetSettledSum();
 
-            dgvSettled.DataSource = TableSettled;
-            dgvSettledSum.DataSource = TableSettledSum;
+                dgvSettled.DataSource = TableSettled;
+                dgvSettledSum.DataSource = TableSettledSum;
 
-            TableUnsettled.Columns.Add("Risks");
-            CheckRisks();
+                TableUnsettled.Columns.Add("Risks");
+                CheckRisks();
 
-            dgvUnsettled.DataSource = TableUnsettled;
+                dgvUnsettled.DataSource = TableUnsettled;
+            }
+            else
+            {
+                MessageBox.Show("Please map both Settled.csv and Unsettled.csv");
+            }
         }
 
         private void riskLegendToolStripMenuItem_Click(object sender, EventArgs e)
@@ -178,6 +184,17 @@ namespace WHATechChallenge
                             else
                             {
                                 TableUnsettled.Rows[x]["Risks"] = 3;
+                            }
+                        }
+                        if(Convert.ToDecimal(TableUnsettled.Rows[x]["To Win"]) > 1000)
+                        {
+                            if (TableUnsettled.Rows[x]["Risks"].ToString() != "")
+                            {
+                                TableUnsettled.Rows[x]["Risks"] = TableUnsettled.Rows[x]["Risks"] + ",4";
+                            }
+                            else
+                            {
+                                TableUnsettled.Rows[x]["Risks"] = 4;
                             }
                         }
                     }
