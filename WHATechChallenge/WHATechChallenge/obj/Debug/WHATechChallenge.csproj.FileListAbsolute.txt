@@ -1,1 +1,2 @@
 C:\Users\Mac\Documents\Exam\WHATechChallenge\WHATechChallenge\bin\Debug\WHATechChallenge.exe.config
+C:\Users\Mac\Documents\GitHub\https---github.com-FindZ0029-MyTest.git\MyTest\WHATechChallenge\WHATechChallenge\bin\Debug\WHATechChallenge.exe.config
